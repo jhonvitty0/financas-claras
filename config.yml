@@ -1,0 +1,124 @@
+backend:
+  name: github
+  repo: seu-usuario/seu-repositorio
+  branch: main
+  auth_endpoint: /auth
+
+site_url: https://seu-dominio.netlify.app
+logo_url: https://seu-dominio.netlify.app/seu-logo.png
+
+media_folder: public/imagens
+public_folder: /imagens
+
+# Mostrar prévia no editor
+editor:
+  preview: true
+
+# Idioma padrão
+i18n:
+  structure: suffix
+  locales: [pt-BR, en]
+  default_locale: pt-BR
+
+collections:
+  # Coleção de Artigos
+  - name: "artigos"
+    label: "📝 Artigos"
+    folder: "conteudo/artigos"
+    create: true
+    slug: "{{slug}}"
+    preview_path: "/artigos/{{slug}}"
+    i18n:
+      structure: suffix
+      locales: [pt-BR, en]
+    sortable_fields: ["date", "titulo", "categoria"]
+    view_filters:
+      - label: "Finanças Pessoais"
+        field: categoria
+        pattern: "Finanças Pessoais"
+      - label: "Investimentos"
+        field: categoria
+        pattern: "Investimentos"
+      - label: "Hábitos"
+        field: categoria
+        pattern: "Hábitos"
+    fields:
+      - { label: "Título", name: "titulo", widget: "string", i18n: true }
+      - { label: "Data de Publicação", name: "data", widget: "datetime", date_format: "DD/MM/YYYY", time_format: "HH:mm" }
+      - { label: "Slug (URL)", name: "slug", widget: "string", hint: "Use apenas letras, números e hífens" }
+      - { label: "Categoria", name: "categoria", widget: "select", options: ["Finanças Pessoais", "Investimentos", "Hábitos"] }
+      - { label: "Tempo de Leitura (minutos)", name: "tempo_leitura", widget: "number", value_type: "int", min: 1, max: 60 }
+      - { label: "Descrição (resumo)", name: "descricao", widget: "text", i18n: true, required: false }
+      - { label: "Imagem de Capa", name: "imagem", widget: "image", required: false }
+      - { label: "Alt da Imagem", name: "alt_imagem", widget: "string", required: false }
+      - { label: "Tags", name: "tags", widget: "list", allow_add: true, required: false }
+      - { label: "Em Destaque", name: "destaque", widget: "boolean", default: false }
+      - { label: "Conteúdo", name: "body", widget: "markdown", i18n: true, buttons: ["bold", "italic", "code", "link", "heading-2", "heading-3", "quote", "bulleted-list", "numbered-list"] }
+
+  # Coleção de Páginas
+  - name: "paginas"
+    label: "📄 Páginas"
+    folder: "conteudo/paginas"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Título", name: "titulo", widget: "string" }
+      - { label: "Slug (URL)", name: "slug", widget: "string" }
+      - { label: "Descrição", name: "descricao", widget: "text", required: false }
+      - { label: "Conteúdo", name: "body", widget: "markdown" }
+
+  # Configurações do Site
+  - name: "configuracoes"
+    label: "⚙️ Configurações"
+    files:
+      - name: "geral"
+        label: "Configurações Gerais"
+        file: "conteudo/_dados/configuracoes.json"
+        fields:
+          - { label: "Título do Site", name: "titulo", widget: "string" }
+          - { label: "Subtítulo", name: "subtitulo", widget: "string" }
+          - { label: "Descrição", name: "descricao", widget: "text" }
+          - { label: "Email de Contato", name: "email", widget: "string", pattern: ['^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', 'Email inválido'] }
+          - { label: "Redes Sociais", name: "redes_sociais", widget: "object", fields: [
+              { label: "Twitter", name: "twitter", widget: "string", required: false },
+              { label: "LinkedIn", name: "linkedin", widget: "string", required: false },
+              { label: "Instagram", name: "instagram", widget: "string", required: false },
+              { label: "GitHub", name: "github", widget: "string", required: false }
+            ]}
+          - { label: "Autor Padrão", name: "autor_padrao", widget: "string" }
+          - { label: "Meta Descrição", name: "meta_descricao", widget: "text" }
+
+      - name: "sobre"
+        label: "Sobre o Blog"
+        file: "conteudo/_dados/sobre.json"
+        fields:
+          - { label: "Descrição da Missão", name: "missao", widget: "markdown" }
+          - { label: "Sobre o Criador", name: "autor", widget: "markdown" }
+          - { label: "Foto do Autor", name: "foto_autor", widget: "image", required: false }
+
+      - name: "menu"
+        label: "Menu de Navegação"
+        file: "conteudo/_dados/menu.json"
+        fields:
+          - label: "Items do Menu"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "Label", name: "label", widget: "string" }
+              - { label: "URL", name: "url", widget: "string" }
+              - { label: "Ícone", name: "icone", widget: "string", required: false }
+
+  # Newsletter/Contatos
+  - name: "formularios"
+    label: "📋 Formulários"
+    folder: "conteudo/formularios"
+    create: false
+    delete: false
+    files:
+      - name: "newsletter"
+        label: "Inscritos na Newsletter"
+        file: "conteudo/formularios/newsletter.md"
+        fields:
+          - { label: "Descrição", name: "descricao", widget: "text" }
+          - { label: "Botão CTA", name: "cta_texto", widget: "string" }
+          - { label: "URL do Formulário", name: "form_url", widget: "string", hint: "URL do Netlify Form" }
